@@ -1,5 +1,6 @@
 {
   "name": "LLM Gateway Conversation",
   "homeassistant": "2025.9.0",
-  "render_readme": true
+  "render_readme": true,
+  "hacs": "2.0.5"
 }
