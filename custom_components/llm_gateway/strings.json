@@ -7,7 +7,7 @@
           "api_key": "[%key:common::config_flow::data::api_key%]"
         },
         "data_description": {
-          "base_url": "OpenAI-kompatibler Endpunkt, z. B. http://homeassistant.local:8081/v1",
+          "base_url": "OpenAI-kompatibler Endpunkt deines llm-gateway-Adapters (Pfad /v1 nicht vergessen).",
           "api_key": "Vom Adapter ignoriert — Platzhalter genügt."
         }
       }
