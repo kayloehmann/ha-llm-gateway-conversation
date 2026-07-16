@@ -1,8 +1,8 @@
-"""Constants for the Claude Proxy Conversation integration."""
+"""Constants for the LLM Gateway Conversation integration."""
 
 import logging
 
-DOMAIN = "claude_proxy"
+DOMAIN = "llm_gateway"
 LOGGER = logging.getLogger(__package__)
 
 CONF_RECOMMENDED = "recommended"
@@ -13,13 +13,14 @@ CONF_TEMPERATURE = "temperature"
 CONF_TOP_P = "top_p"
 CONF_BASE_URL = "base_url"
 
-# Defaults für einen ha-claude-proxy-Adapter (OpenAI-kompatibel, proxyt zu Claude).
-# base_url im Einrichtungsdialog an die eigene Adapter-Adresse anpassen.
+# Defaults für einen llm-gateway-Adapter (OpenAI-kompatibel, mit Failover-Kette
+# Claude→Mistral→GPT→Gemini). base_url im Einrichtungsdialog an die eigene
+# Adapter-Adresse anpassen.
 RECOMMENDED_CHAT_MODEL = "claude-sonnet-4-6"
 RECOMMENDED_MAX_TOKENS = 1024
 RECOMMENDED_TEMPERATURE = 1.0
 RECOMMENDED_TOP_P = 1.0
-RECOMMENDED_BASE_URL = "http://homeassistant.local:8080/v1"
+RECOMMENDED_BASE_URL = "http://homeassistant.local:8081/v1"
 
 # Persona-Default (in der UI frei überschreibbar). Die HA-LLM-API hängt die
 # Tool-/Entity-Instruktionen automatisch an.

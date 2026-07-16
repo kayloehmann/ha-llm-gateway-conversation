@@ -1,4 +1,4 @@
-"""Conversation support for the Claude Proxy (ha-claude-proxy adapter)."""
+"""Conversation support for the LLM Gateway (llm-gateway adapter)."""
 
 from collections.abc import Callable
 import json
@@ -26,7 +26,7 @@ from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers import chat_session, device_registry as dr, intent, llm
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from . import ClaudeProxyConfigEntry
+from . import LlmGatewayConfigEntry
 from .const import (
     CONF_CHAT_MODEL,
     CONF_MAX_TOKENS,
@@ -47,11 +47,11 @@ MAX_TOOL_ITERATIONS = 10
 
 async def async_setup_entry(
     hass: HomeAssistant,
-    config_entry: ClaudeProxyConfigEntry,
+    config_entry: LlmGatewayConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up conversation entities."""
-    agent = ClaudeProxyConversationEntity(config_entry)
+    agent = LlmGatewayConversationEntity(config_entry)
     async_add_entities([agent])
 
 
@@ -129,22 +129,22 @@ def _convert_content_to_param(
     )
 
 
-class ClaudeProxyConversationEntity(
+class LlmGatewayConversationEntity(
     conversation.ConversationEntity, conversation.AbstractConversationAgent
 ):
-    """Claude Proxy conversation agent."""
+    """LLM Gateway conversation agent."""
 
     _attr_has_entity_name = True
     _attr_name = None
 
-    def __init__(self, entry: ClaudeProxyConfigEntry) -> None:
+    def __init__(self, entry: LlmGatewayConfigEntry) -> None:
         """Initialize the agent."""
         self.entry = entry
         self._attr_unique_id = entry.entry_id
         self._attr_device_info = dr.DeviceInfo(
             identifiers={(DOMAIN, entry.entry_id)},
             name=entry.title,
-            manufacturer="ha-claude-proxy",
+            manufacturer="llm-gateway",
             model=entry.options.get(CONF_CHAT_MODEL, RECOMMENDED_CHAT_MODEL),
             entry_type=dr.DeviceEntryType.SERVICE,
         )
@@ -229,8 +229,8 @@ class ClaudeProxyConversationEntity(
                 LOGGER.error("Rate limited: %s", err)
                 raise HomeAssistantError("Rate limited or insufficient funds") from err
             except openai.OpenAIError as err:
-                LOGGER.error("Fehler beim Aufruf des Claude-Proxy: %s", err)
-                raise HomeAssistantError("Error talking to Claude proxy") from err
+                LOGGER.error("Fehler beim Aufruf des llm-gateway: %s", err)
+                raise HomeAssistantError("Error talking to llm-gateway") from err
 
             LOGGER.debug("Response %s", result)
             response = result.choices[0].message

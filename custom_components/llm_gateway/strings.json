@@ -3,11 +3,11 @@
     "step": {
       "user": {
         "data": {
-          "base_url": "Basis-URL des ha-claude-proxy-Adapters",
+          "base_url": "Basis-URL des llm-gateway-Adapters",
           "api_key": "[%key:common::config_flow::data::api_key%]"
         },
         "data_description": {
-          "base_url": "OpenAI-kompatibler Endpunkt, z. B. http://homeassistant.local:8080/v1",
+          "base_url": "OpenAI-kompatibler Endpunkt, z. B. http://homeassistant.local:8081/v1",
           "api_key": "Vom Adapter ignoriert — Platzhalter genügt."
         }
       }

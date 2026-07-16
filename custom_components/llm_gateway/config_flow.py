@@ -1,4 +1,4 @@
-"""Config flow for the Claude Conversation (Proxy) integration."""
+"""Config flow for the LLM Gateway Conversation integration."""
 
 from __future__ import annotations
 
@@ -73,8 +73,8 @@ async def validate_input(hass: HomeAssistant, data: dict[str, Any]) -> None:
     await hass.async_add_executor_job(client.with_options(timeout=10.0).models.list)
 
 
-class ClaudeProxyConfigFlow(ConfigFlow, domain=DOMAIN):
-    """Handle a config flow for Claude Conversation (Proxy)."""
+class LlmGatewayConfigFlow(ConfigFlow, domain=DOMAIN):
+    """Handle a config flow for LLM Gateway Conversation."""
 
     VERSION = 1
 
@@ -100,7 +100,7 @@ class ClaudeProxyConfigFlow(ConfigFlow, domain=DOMAIN):
             errors["base"] = "unknown"
         else:
             return self.async_create_entry(
-                title="Claude",
+                title="LLM Gateway",
                 data=user_input,
                 options=RECOMMENDED_OPTIONS,
             )
@@ -112,11 +112,11 @@ class ClaudeProxyConfigFlow(ConfigFlow, domain=DOMAIN):
     @staticmethod
     def async_get_options_flow(config_entry: ConfigEntry) -> OptionsFlow:
         """Create the options flow."""
-        return ClaudeProxyOptionsFlow(config_entry)
+        return LlmGatewayOptionsFlow(config_entry)
 
 
-class ClaudeProxyOptionsFlow(OptionsFlow):
-    """Claude Proxy config flow options handler."""
+class LlmGatewayOptionsFlow(OptionsFlow):
+    """LLM Gateway config flow options handler."""
 
     def __init__(self, config_entry: ConfigEntry) -> None:
         """Initialize options flow."""
@@ -143,15 +143,15 @@ class ClaudeProxyOptionsFlow(OptionsFlow):
                 CONF_LLM_HASS_API: user_input.get(CONF_LLM_HASS_API),
             }
 
-        schema = claude_proxy_config_option_schema(self.hass, options)
+        schema = llm_gateway_config_option_schema(self.hass, options)
         return self.async_show_form(step_id="init", data_schema=vol.Schema(schema))
 
 
-def claude_proxy_config_option_schema(
+def llm_gateway_config_option_schema(
     hass: HomeAssistant,
     options: dict[str, Any] | MappingProxyType[str, Any],
 ) -> VolDictType:
-    """Return a schema for the Claude Proxy completion options."""
+    """Return a schema for the LLM Gateway completion options."""
     hass_apis: list[SelectOptionDict] = [SelectOptionDict(label="No control", value="none")]
     hass_apis.extend(
         SelectOptionDict(label=api.name, value=api.id)

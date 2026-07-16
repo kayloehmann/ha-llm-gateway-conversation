@@ -1,8 +1,9 @@
-"""The Claude Conversation (Proxy) integration.
+"""The LLM Gateway Conversation integration.
 
 Forked from michelle-avery/openai-compatible-conversation, zugeschnitten auf den
-hauseigenen ha-claude-proxy-Adapter. Der dall-e Bild-Service der Vorlage entfällt
-(Claude/der Adapter unterstützt keine Bildgenerierung).
+hauseigenen llm-gateway-Adapter (Failover-Kette Claude→Mistral→GPT→Gemini). Der
+dall-e Bild-Service der Vorlage entfällt (kein Provider in der Kette
+unterstützt Bildgenerierung).
 """
 
 from __future__ import annotations
@@ -19,11 +20,11 @@ from .const import CONF_BASE_URL, LOGGER
 
 PLATFORMS = (Platform.CONVERSATION,)
 
-type ClaudeProxyConfigEntry = ConfigEntry[openai.AsyncClient]
+type LlmGatewayConfigEntry = ConfigEntry[openai.AsyncClient]
 
 
-async def async_setup_entry(hass: HomeAssistant, entry: ClaudeProxyConfigEntry) -> bool:
-    """Set up Claude Conversation (Proxy) from a config entry."""
+async def async_setup_entry(hass: HomeAssistant, entry: LlmGatewayConfigEntry) -> bool:
+    """Set up LLM Gateway Conversation from a config entry."""
     client = openai.AsyncOpenAI(
         api_key=entry.data.get(CONF_API_KEY) or "not-needed",
         http_client=get_async_client(hass),
@@ -47,5 +48,5 @@ async def async_setup_entry(hass: HomeAssistant, entry: ClaudeProxyConfigEntry) 
 
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
-    """Unload Claude Conversation (Proxy)."""
+    """Unload LLM Gateway Conversation."""
     return await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
