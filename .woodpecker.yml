@@ -1,0 +1,11 @@
+when:
+  - event: [push, pull_request, manual]
+
+steps:
+  validate:
+    image: python:3.13-alpine
+    commands:
+      - python -m compileall -q custom_components
+      - python -m json.tool hacs.json >/dev/null
+      - python -m json.tool custom_components/llm_gateway/manifest.json >/dev/null
+      - python -m json.tool custom_components/llm_gateway/strings.json >/dev/null
