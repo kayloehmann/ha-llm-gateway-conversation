@@ -12,8 +12,8 @@ dall-e-Bildservice der Vorlage.
 
 ## Voraussetzung
 
-`llm-gateway` läuft erreichbar im LAN. Die Basis-URL im Einrichtungsdialog auf
-die Adresse deines Adapters setzen (z. B. `http://homeassistant.local:8081/v1`).
+`llm-gateway` läuft erreichbar im LAN. Die Basis-URL im Einrichtungsdialog ist
+für die lokale Installation auf `http://10.111.0.104:8081/v1` voreingestellt.
 
 ## Installation
 
@@ -35,8 +35,13 @@ kopieren, HA neu starten.
 
 ## Modell
 
-Default `claude-sonnet-4-6` (der Adapter mappt den Namen auf das jeweils
-ausgelieferte Provider-Modell). Frei änderbar in den Optionen.
+Default `claude-auto`: Der Adapter wählt für Home-Assistant-Anfragen ohne
+zusätzlichen Judge anhand der Anfragekomplexität die passende Modellstufe.
+Der Modellname ist in den Optionen frei änderbar.
+
+Jede Anfrage trägt im OpenAI-kompatiblen `user`-Feld die feste Kennung
+`homeassistant`. Der Gateway kann HA dadurch als Aufrufer anzeigen, statt den
+Request unter `unknown` zu protokollieren.
 
 ## Umbenennung von „Claude Conversation (Proxy)" (Domain `claude_proxy`)
 

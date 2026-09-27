@@ -32,9 +32,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: LlmGatewayConfigEntry) -
     )
 
     try:
-        await hass.async_add_executor_job(
-            client.with_options(timeout=10.0).models.list
-        )
+        await client.with_options(timeout=10.0).models.list()
     except openai.AuthenticationError as err:
         LOGGER.error("Authentifizierung am Adapter fehlgeschlagen: %s", err)
         return False

@@ -70,7 +70,7 @@ async def validate_input(hass: HomeAssistant, data: dict[str, Any]) -> None:
         base_url=data[CONF_BASE_URL],
         http_client=get_async_client(hass),
     )
-    await hass.async_add_executor_job(client.with_options(timeout=10.0).models.list)
+    await client.with_options(timeout=10.0).models.list()
 
 
 class LlmGatewayConfigFlow(ConfigFlow, domain=DOMAIN):

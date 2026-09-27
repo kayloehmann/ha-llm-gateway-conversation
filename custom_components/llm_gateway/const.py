@@ -13,14 +13,18 @@ CONF_TEMPERATURE = "temperature"
 CONF_TOP_P = "top_p"
 CONF_BASE_URL = "base_url"
 
+# OpenAI-compatible caller identifier. The gateway records this as the agent
+# name so Home Assistant requests are distinguishable from OpenClaw traffic.
+GATEWAY_CLIENT_ID = "homeassistant"
+
 # Defaults für einen llm-gateway-Adapter (OpenAI-kompatibel, mit Failover-Kette
 # Claude→Mistral→GPT→Gemini). base_url im Einrichtungsdialog an die eigene
 # Adapter-Adresse anpassen.
-RECOMMENDED_CHAT_MODEL = "claude-sonnet-4-6"
+RECOMMENDED_CHAT_MODEL = "claude-auto"
 RECOMMENDED_MAX_TOKENS = 1024
 RECOMMENDED_TEMPERATURE = 1.0
 RECOMMENDED_TOP_P = 1.0
-RECOMMENDED_BASE_URL = "http://homeassistant.local:8081/v1"
+RECOMMENDED_BASE_URL = "http://10.111.0.104:8081/v1"
 
 # Persona-Default (in der UI frei überschreibbar). Die HA-LLM-API hängt die
 # Tool-/Entity-Instruktionen automatisch an.

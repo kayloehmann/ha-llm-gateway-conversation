@@ -16,7 +16,7 @@ from openai.types.chat import (
 )
 from openai.types.chat.chat_completion_message_function_tool_call import Function
 from openai.types.shared_params import FunctionDefinition
-from voluptuous_openapi import convert
+from probatio import to_openapi
 
 from homeassistant.components import conversation
 from homeassistant.config_entries import ConfigEntry
@@ -34,6 +34,7 @@ from .const import (
     CONF_TEMPERATURE,
     CONF_TOP_P,
     DOMAIN,
+    GATEWAY_CLIENT_ID,
     LOGGER,
     RECOMMENDED_CHAT_MODEL,
     RECOMMENDED_MAX_TOKENS,
@@ -61,7 +62,7 @@ def _format_tool(
     """Format tool specification."""
     tool_spec = FunctionDefinition(
         name=tool.name,
-        parameters=convert(tool.parameters, custom_serializer=custom_serializer),
+        parameters=to_openapi(tool.parameters, custom_serializer=custom_serializer),
     )
     if tool.description:
         tool_spec["description"] = tool.description
@@ -193,11 +194,11 @@ class LlmGatewayConversationEntity(
         options = self.entry.options
 
         try:
-            await chat_log.async_update_llm_data(
-                DOMAIN,
-                user_input,
+            await chat_log.async_provide_llm_data(
+                user_input.as_llm_context(DOMAIN),
                 options.get(CONF_LLM_HASS_API),
                 options.get(CONF_PROMPT),
+                user_input.extra_system_prompt,
             )
         except conversation.ConverseError as err:
             return err.as_conversation_result()
@@ -221,7 +222,7 @@ class LlmGatewayConversationEntity(
                 "max_tokens": options.get(CONF_MAX_TOKENS, RECOMMENDED_MAX_TOKENS),
                 "top_p": options.get(CONF_TOP_P, RECOMMENDED_TOP_P),
                 "temperature": options.get(CONF_TEMPERATURE, RECOMMENDED_TEMPERATURE),
-                "user": chat_log.conversation_id,
+                "user": GATEWAY_CLIENT_ID,
             }
             try:
                 result = await client.chat.completions.create(**model_args)
